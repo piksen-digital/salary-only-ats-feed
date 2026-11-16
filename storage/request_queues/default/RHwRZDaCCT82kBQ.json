@@ -1,0 +1,9 @@
+{
+	"id": "RHwRZDaCCT82kBQ",
+	"json": "{\"id\":\"RHwRZDaCCT82kBQ\",\"url\":\"http://localhost:8080/fixtures/job-board.html\",\"loadedUrl\":\"http://localhost:8080/fixtures/job-board.html\",\"uniqueKey\":\"http://localhost:8080/fixtures/job-board.html\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-11-16T12:52:15.269Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "http://localhost:8080/fixtures/job-board.html",
+	"url": "http://localhost:8080/fixtures/job-board.html"
+}

@@ -1,0 +1,6 @@
+{
+    "startUrls": [
+        { "url": "http://localhost:8080/fixtures/job-board.html" }
+    ],
+    "defaultCurrency": "USD"
+}

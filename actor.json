@@ -3,7 +3,7 @@
     "name": "salary-range-only-ats-job-feed",
     "title": "Salary-Range-Only ATS Job Feed",
     "description": "Extracts job feeds from major ATS platforms, automatically filtering out listings lacking transparent salary ranges and normalizing compensation data.",
-    "version": "1.0",
+    "version": "0.0",
     "dockerfile": "./Dockerfile",
     "inputSchema": {
         "type": "object",

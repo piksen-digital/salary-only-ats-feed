@@ -1,0 +1,12 @@
+{
+	"url": "http://localhost:8080/fixtures/job-board.html",
+	"title": "Senior Staff Engineer (Remote)",
+	"company": "Acme Corp",
+	"hasSalary": true,
+	"compensationType": "Base",
+	"currency": "USD",
+	"annualizedMin": 120000,
+	"annualizedMax": 160000,
+	"rawSalaryString": "$120,000 to $160,000k per year",
+	"scrapedAt": "2026-11-16T12:52:15.255Z"
+}

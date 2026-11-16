@@ -14,13 +14,11 @@ const {
 
 const proxyConfig = proxyConfiguration ? await Actor.createProxyConfiguration(proxyConfiguration) : undefined;
 
-// Keep track of successfully extracted salary items
 let savedCount = 0;
 
 const crawler = new CheerioCrawler({
     proxyConfiguration: proxyConfig,
     requestHandler: async ({ request, $, log }) => {
-        // Enforce limit boundary instantly before processing heavy tasks
         if (savedCount >= maxResults) {
             log.info(`Reached maximum requested limit of ${maxResults} items. Halting engine stream.`);
             await crawler.autoscaledPool.abort();
@@ -44,11 +42,24 @@ const crawler = new CheerioCrawler({
             return;
         }
 
-        // Increment count and push clean metrics row
         savedCount++;
-        const company = $('meta[property="og:site_name"]').attr('content') || 
-                        $('meta[property="og:title"]').attr('content') || 
-                        'Unknown Company';
+        
+        // --- 🧼 ADVANCED COMPANY NAME CLEANING MATRIX ---
+        let company = $('meta[property="og:site_name"]').attr('content') || 
+                      $('meta[property="og:title"]').attr('content') || 
+                      title;
+
+        // If the company string fell back to the title, split and isolate the pure name
+        if (company.includes(' - ')) {
+            company = company.split(' - ')[0]; // Grabs "Waabi" out of "Waabi - Senior Software Engineer..."
+        } else if (company.includes(' | ')) {
+            company = company.split(' | ')[0];
+        } else if (company.includes(' : ')) {
+            company = company.split(' : ')[0];
+        }
+        
+        company = company.trim();
+        // ------------------------------------------------
 
         await Actor.pushData({
             url: request.url,
@@ -58,7 +69,7 @@ const crawler = new CheerioCrawler({
             scrapedAt: new Date().toISOString(),
         });
 
-        log.info(`Successfully captured item #${savedCount}: ${title}`);
+        log.info(`Successfully captured item #${savedCount}: ${title} at ${company}`);
     },
     failedRequestHandler: ({ request, log }) => {
         log.error(`Request ${request.url} failed completely.`);

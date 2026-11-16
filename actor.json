@@ -1,0 +1,37 @@
+{
+    "actorSpecification": 1,
+    "name": "salary-range-only-ats-job-feed",
+    "title": "Salary-Range-Only ATS Job Feed",
+    "description": "Extracts job postings from ATS platforms but filters out any listing lacking a transparent salary range. Normalizes compensation metrics automatically.",
+    "version": "0.1",
+    "dockerfile": "./Dockerfile",
+    "input": {
+        "type": "object",
+        "properties": {
+            "startUrls": {
+                "title": "ATS Job Board URLs",
+                "type": "array",
+                "description": "List of URLs targeting job boards or specific postings to scan.",
+                "editor": "requestListSources",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "url": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "prefill": [
+                    { "url": "http://localhost:8080/fixtures/job-board.html" }
+                ]
+            },
+            "defaultCurrency": {
+                "title": "Default Currency Fallback",
+                "type": "string",
+                "description": "Fallback asset symbol if none is discovered on-page.",
+                "default": "USD"
+            }
+        },
+        "required": ["startUrls"]
+    }
+}

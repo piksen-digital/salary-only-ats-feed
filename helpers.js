@@ -1,21 +1,25 @@
 /**
- * Simple, powerful utility to extract and normalize salary blocks.
- * In a production scaling phase, this can be hooked into an LLM tool.
+ * Advanced utility to extract and normalize salary blocks from raw text.
  */
 export function parseSalary(text, defaultCurrency = 'USD') {
-    // Look for patterns like $90,000 - $120,000, $150k, or £60/hr
-    const salaryRegex = /(?:[\$\€\£]|USD|EUR|GBP)\s*?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?k?)\s*(?:-|to)\s*(?:[\$\€\£]|USD|EUR|GBP)?\s*?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?k?)\s*(?:\/\s*(hr|hour|year|yr|annum|month|mo))?/i;
+    if (!text) return null;
+
+    // Production-ready regex matrix matching standard ATS formats
+    const salaryRegex = /(?:[\$\€\£]|USD|EUR|GBP)\s*?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?k?)\s*(?:-|to|–)\s*(?:[\$\€\£]|USD|EUR|GBP)?\s*?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?k?)\s*(?:(?:\/|per|a)\s*(hr|hour|year|yr|annum|month|mo|weekly|week))?/i;
     
     const match = text.match(salaryRegex);
     if (!match) return null;
 
-    let [_, rawMin, rawMax, period] = match;
+    let [rawMatchString, rawMin, rawMax, period] = match;
     
-    // Clean strings and handle 'k' notation
     const cleanNum = (str) => {
+        if (!str) return 0;
         str = str.toLowerCase().replace(/,/g, '');
+        
+        // Smart 'k' protection: Only multiply by 1000 if the raw number is small (e.g. 120k vs 120000k)
         if (str.includes('k')) {
-            return parseFloat(str.replace('k', '')) * 1000;
+            const basicNum = parseFloat(str.replace('k', ''));
+            return basicNum < 1000 ? basicNum * 1000 : basicNum;
         }
         return parseFloat(str);
     };
@@ -26,21 +30,24 @@ export function parseSalary(text, defaultCurrency = 'USD') {
 
     let compType = 'Base';
     let currency = defaultCurrency;
-    if (text.includes('£') || text.includes('GBP')) currency = 'GBP';
-    if (text.includes('€') || text.includes('EUR')) currency = 'EUR';
+    if (rawMatchString.includes('£') || rawMatchString.includes('GBP')) currency = 'GBP';
+    if (rawMatchString.includes('€') || rawMatchString.includes('EUR')) currency = 'EUR';
 
-    // Normalize everything strictly to Annual
+    // Annualization Normalization Engine Logic
     if (period.startsWith('hr') || period.startsWith('hour')) {
-        min = min * 40 * 52; // Standard 2080 hour year
+        min = min * 40 * 52;
         max = max * 40 * 52;
         compType = 'Hourly';
     } else if (period.startsWith('m') || period.startsWith('mo')) {
         min = min * 12;
         max = max * 12;
+    } else if (period.startsWith('w')) {
+        min = min * 52;
+        max = max * 52;
     }
 
-    // Sanity check to avoid false positives on random metrics
-    if (min < 15000 || max > 1000000) return null;
+        // Drop obvious outlier parsing artifacts (Elevated ceiling to $1,000,000 for US tech bands)
+    if (min < 10000 || max > 1000000) return null;
 
     return {
         hasSalary: true,
@@ -48,6 +55,6 @@ export function parseSalary(text, defaultCurrency = 'USD') {
         currency,
         annualizedMin: Math.round(min),
         annualizedMax: Math.round(max),
-        rawSalaryString: match[0].trim()
+        rawSalaryString: rawMatchString.trim()
     };
 }

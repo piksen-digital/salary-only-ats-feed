@@ -14,7 +14,6 @@
             "editor": "requestListSources",
             "items": {
                 "type": "object",
-                "title": "Target URL Pattern",
                 "required": [
                     "url"
                 ],

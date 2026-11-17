@@ -2,10 +2,11 @@
     "actorSpecification": 1,
     "name": "salary-range-only-ats-job-feed",
     "title": "Salary-Range-Only ATS Job Feed",
-    "description": "Extracts job feeds from major ATS platforms, automatically filtering out listings lacking transparent salary ranges and normalizing compensation data.",
+    "description": "Extracts job feeds from major ATS platforms, filtering out listings lacking transparent salary ranges.",
     "version": "0.0",
-    "dockerfile": "./Dockerfile",
-    "inputSchema": {
+    "dockerfile": "../Dockerfile",
+    "inputSchema": "./input_schema.json"
+}
         "type": "object",
         "title": "Salary Feed Input Schema",
         "required": ["startUrls", "maxResults"],

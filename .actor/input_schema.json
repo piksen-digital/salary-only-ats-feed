@@ -1,0 +1,40 @@
+{
+    "title": "Salary Feed Input Schema",
+    "type": "object",
+    "required": ["startUrls", "maxResults"],
+    "properties": {
+        "startUrls": {
+            "title": "ATS Board or Job URLs",
+            "type": "array",
+            "description": "Paste links to specific postings OR a main company job board catalog.",
+            "editor": "requestListSources",
+            "items": {
+                "type": "object",
+                "title": "Target URL Pattern",
+                "required": ["url"],
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "Job URL Link"
+                    }
+                }
+            },
+            "prefill": [
+                { "url": "https://jobs.lever.co/waabi/12c40987-656a-4ec3-9fc0-3c0801c74238" }
+            ]
+        },
+        "maxResults": {
+            "title": "Maximum Paid Items",
+            "type": "integer",
+            "description": "The maximum number of transparent salary listings to output before stopping.",
+            "default": 10,
+            "minimum": 1
+        },
+        "defaultCurrency": {
+            "title": "Default Currency Fallback",
+            "type": "string",
+            "description": "Fallback asset symbol if none is discovered on-page.",
+            "default": "USD"
+        }
+    }
+}

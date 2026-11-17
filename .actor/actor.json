@@ -3,47 +3,7 @@
     "name": "salary-range-only-ats-job-feed",
     "title": "Salary-Range-Only ATS Job Feed",
     "description": "Extracts job feeds from major ATS platforms, filtering out listings lacking transparent salary ranges.",
-    "version": "0.0",
+    "version": "1.0",
     "dockerfile": "../Dockerfile",
     "inputSchema": "./input_schema.json"
-}
-        "type": "object",
-        "title": "Salary Feed Input Schema",
-        "required": ["startUrls", "maxResults"],
-        "properties": {
-            "startUrls": {
-                "title": "ATS Board or Job URLs",
-                "type": "array",
-                "description": "Paste links to specific postings OR a main company job board catalog.",
-                "editor": "requestListSources",
-                "items": {
-                    "type": "object",
-                    "title": "Target URL Pattern",
-                    "required": ["url"],
-                    "properties": {
-                        "url": {
-                            "type": "string",
-                            "title": "Job URL Link"
-                        }
-                    }
-                },
-                "prefill": [
-                    { "url": "https://lever.co" }
-                ]
-            },
-            "maxResults": {
-                "title": "Maximum Paid Items",
-                "type": "integer",
-                "description": "The maximum number of transparent salary listings to output before stopping.",
-                "default": 10,
-                "minimum": 1
-            },
-            "defaultCurrency": {
-                "title": "Default Currency Fallback",
-                "type": "string",
-                "description": "Fallback asset symbol if none is discovered on-page.",
-                "default": "USD"
-            }
-        }
-    }
 }

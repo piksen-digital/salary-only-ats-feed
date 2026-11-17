@@ -21,9 +21,11 @@
                 "properties": {
                     "url": {
                         "type": "string",
-                        "title": "Job URL Link"
+                        "title": "Job URL Link",
+                        "description": "Full URL of a job posting or job board page."
                     }
-                }
+                },
+                "description": "A single target URL entry."
             },
             "prefill": [
                 {

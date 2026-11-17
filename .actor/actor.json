@@ -5,5 +5,8 @@
     "description": "Extracts job feeds from major ATS platforms, filtering out listings lacking transparent salary ranges.",
     "version": "0.0",
     "dockerfile": "../Dockerfile",
-    "inputSchema": "./input_schema.json"
+    "inputSchema": "./input_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    }
 }

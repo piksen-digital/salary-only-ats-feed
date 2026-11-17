@@ -14,14 +14,15 @@ A high-signal data pipeline built for Apify that extracts and normalizes structu
 
 ```
 ├── .actor/
-│   ├── actor.json         # Apify manifest (points to the input schema)
-│   └── input_schema.json  # Input form definition rendered by Apify Console
+│   ├── actor.json           # Apify manifest (points to input + dataset schemas)
+│   ├── input_schema.json    # Input form definition rendered by Apify Console
+│   └── dataset_schema.json  # Output fields + views rendered in the Output tab
 ├── .dockerignore
 ├── .gitignore
 ├── README.md
-├── Dockerfile             # Production runtime container configuration
-├── main.js                # Core scraping orchestration
-├── helpers.js             # Salary extraction & normalization logic
+├── Dockerfile               # Production runtime container configuration
+├── main.js                  # Core scraping orchestration
+├── helpers.js               # Salary extraction & normalization logic
 └── package.json
 ```
 
@@ -69,5 +70,24 @@ Example raw input:
     "defaultCurrency": "USD"
 }
 ```
+
+## 📤 Output Dataset
+
+Each dataset item is a job listing with a verified transparent salary range:
+
+| Field | Description |
+| --- | --- |
+| `url` | Source URL of the job posting |
+| `title` | Job title as shown on the posting |
+| `company` | Cleaned company name |
+| `hasSalary` | Always `true`: the item passed the salary filter |
+| `compensationType` | How the salary was quoted: `Base` or `Hourly` |
+| `currency` | ISO currency code of the quoted range |
+| `annualizedMin` | Normalized annualized minimum salary |
+| `annualizedMax` | Normalized annualized maximum salary |
+| `rawSalaryString` | Original salary text as found on the page |
+| `scrapedAt` | ISO timestamp of extraction |
+
+The Output tab in Apify Console renders two views defined in `.actor/dataset_schema.json`: **Salary listings** (default overview) and **Compensation details** (including the raw salary text and scrape timestamp).
 
 > **Note:** Workday-hosted boards render client-side and require a headless browser, while this actor uses Cheerio (static HTML). Prefer Greenhouse and Lever URLs for best results.

@@ -1,0 +1,56 @@
+{
+    "actorSpecification": 1,
+    "fields": {
+        "type": "object",
+        "properties": {
+            "url": { "type": "string", "description": "Source URL of the job posting." },
+            "title": { "type": "string", "description": "Job title as shown on the posting." },
+            "company": { "type": "string", "description": "Cleaned company name." },
+            "hasSalary": { "type": "boolean", "description": "Always true: item passed the transparent-salary filter." },
+            "compensationType": { "type": "string", "description": "How the salary was quoted on the page: Base or Hourly." },
+            "currency": { "type": "string", "description": "ISO currency code of the quoted range." },
+            "annualizedMin": { "type": "number", "description": "Normalized annualized minimum salary." },
+            "annualizedMax": { "type": "number", "description": "Normalized annualized maximum salary." },
+            "rawSalaryString": { "type": "string", "description": "Original salary text as found on the page." },
+            "scrapedAt": { "type": "string", "description": "ISO timestamp of extraction." }
+        }
+    },
+    "views": {
+        "overview": {
+            "title": "Salary listings",
+            "transformation": {
+                "fields": ["company", "title", "annualizedMin", "annualizedMax", "currency", "url"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "company": { "label": "Company" },
+                    "title": { "label": "Job title" },
+                    "annualizedMin": { "label": "Annual min", "format": "number" },
+                    "annualizedMax": { "label": "Annual max", "format": "number" },
+                    "currency": { "label": "Currency" },
+                    "url": { "label": "Posting", "format": "link" }
+                }
+            }
+        },
+        "compensation-details": {
+            "title": "Compensation details",
+            "transformation": {
+                "fields": ["company", "compensationType", "currency", "annualizedMin", "annualizedMax", "rawSalaryString", "scrapedAt", "url"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "company": { "label": "Company" },
+                    "compensationType": { "label": "Comp type" },
+                    "currency": { "label": "Currency" },
+                    "annualizedMin": { "label": "Annual min", "format": "number" },
+                    "annualizedMax": { "label": "Annual max", "format": "number" },
+                    "rawSalaryString": { "label": "Raw salary text" },
+                    "scrapedAt": { "label": "Scraped at" },
+                    "url": { "label": "Posting", "format": "link" }
+                }
+            }
+        }
+    }
+}

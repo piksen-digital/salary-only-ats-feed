@@ -92,6 +92,15 @@ const crawler = new CheerioCrawler({
             scrapedAt: new Date().toISOString(),
         });
 
+        // Monetization: charge one PPE event per delivered listing.
+        // IMPORTANT: 'salary-listing' must exactly match the event name
+        // configured in the actor's Monetization settings on the platform.
+        try {
+            await Actor.addChargeForEvent({ eventName: 'salary-listing', count: 1 });
+        } catch (chargeErr) {
+            log.warning(`Could not charge PPE event: ${chargeErr.message}`);
+        }
+
         log.info(`Successfully captured item #${savedCount}: ${title} at ${company}`);
     },
     failedRequestHandler: ({ request, log }) => {
